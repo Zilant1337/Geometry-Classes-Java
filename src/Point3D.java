@@ -27,6 +27,8 @@ public class Point3D extends Point {
     }
 
     public double mix_prod(Point3D p1, Point3D p2) {
+
         return mix_prod(this, p1, p2);
+
     }
 }
