@@ -42,14 +42,19 @@ public class Segment extends OpenFigure {
         else
         {
             Point2D[] pts = null;
-            if (i instanceof Polyline) pts = ((Polyline)i).getP();
-            else if (i instanceof NGon) pts = ((NGon)i).getP();
-            else if (i instanceof TGon) pts = ((TGon)i).getP();
-            else if (i instanceof QGon) pts = ((QGon)i).getP();
-            else if (i instanceof Rectangle) pts = ((Rectangle)i).getP();
-            else if (i instanceof Trapeze) pts = ((Trapeze)i).getP();
-            if (pts == null) {
-                throw new Exception("No points have been passed down");
+            try {
+                if (i instanceof Polyline) pts = ((Polyline)i).getP();
+                else if (i instanceof Rectangle) pts = ((Rectangle)i).getP();
+                else if (i instanceof Trapeze) pts = ((Trapeze)i).getP();
+                else if (i instanceof TGon) pts = ((TGon)i).getP();
+                else if (i instanceof QGon) pts = ((QGon)i).getP();
+                else if (i instanceof NGon) pts = ((NGon)i).getP();
+                if (pts == null) {
+                    throw new Exception("No points have been passed down");
+                }
+            }
+            catch (Exception e){
+                System.out.println("No points have been passed down");
             }
             Point2D prev = pts[0];
             for(Point2D pt : pts)
@@ -57,12 +62,8 @@ public class Segment extends OpenFigure {
                 if (new Segment(prev, pt).cross(this)) return true;
                 prev = pt;
             }
-            if ((i instanceof NGon) && new Segment(pts[0], pts[pts.length - 1]).cross(this)) {
-                return true;
-            }
-            return false;
+            return (i instanceof NGon) && new Segment(pts[0], pts[pts.length - 1]).cross(this);
         }
-        return false;
     }
 
     public boolean counterclockwise(Point2D a, Point2D b, Point2D c){
